@@ -1,7 +1,9 @@
 [project]
 name = "fhir-graph-injector"
 version = "0.1.0"
-description = "Add your description here"
+description = "This repository contains Python code to convert FHIR resources into a knowledge graph format."
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "neo4j>=6.0.3",
+]
