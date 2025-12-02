@@ -5,7 +5,7 @@ Configuration settings for FHIR Neo4j Injector
 # Neo4j connection settings
 NEO4J_URI = "bolt://localhost:7687"
 NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "password"  # Change this to your actual Neo4j password
+NEO4J_PASSWORD = "Qwaszx12"  # Change this to your actual Neo4j password
 
 # Application settings
 DATA_DIRECTORY = "data"

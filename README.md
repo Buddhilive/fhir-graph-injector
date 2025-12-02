@@ -32,6 +32,14 @@ A Python application to inject FHIR (Fast Healthcare Interoperability Resources)
 3. Start the database service
 4. Update the Neo4j password in `config.py`
 
+## Install Neo4j on Docker
+
+You can also run Neo4j using Docker. Use the following command to pull and run the Neo4j image:
+
+```bash
+docker run -d --name neo4j --restart always --publish=7474:7474 --publish=7687:7687 --env NEO4J_AUTH=neo4j/Qwaszx12 neo4j:latest
+```
+
 ## Configuration
 
 Edit `config.py` to match your Neo4j setup:
@@ -44,18 +52,31 @@ NEO4J_PASSWORD = "your_password_here"  # Change this!
 
 ## Usage
 
-### Processing All FHIR Files
+### V2 Implementation (Recommended - Following Reference Tutorial)
 
-To process all FHIR Bundle JSON files in the `data` directory:
+**Processing All FHIR Files:**
+```bash
+python main_v2.py
+```
 
+**Testing with a Single File:**
+```bash
+python test_single_file_v2.py
+```
+
+**Running Sample Queries:**
+```bash
+python sample_queries.py
+```
+
+### V1 Implementation (Original)
+
+**Processing All FHIR Files:**
 ```bash
 python main.py
 ```
 
-### Testing with a Single File
-
-To test with just one FHIR file:
-
+**Testing with a Single File:**
 ```bash
 python test_single_file.py
 ```
@@ -83,15 +104,37 @@ with FHIRNeo4jInjector("bolt://localhost:7687", "neo4j", "password") as injector
 
 ## Graph Schema
 
-The application creates the following node types and relationships:
+### V2 Implementation (Following Reference Tutorial)
 
-### Node Types
-- **Patient**: Contains demographic and personal information
-- **Encounter**: Represents medical visits or interactions
+**Node Types:**
+- **Patient**: Demographics, address, race, ethnicity
+- **Practitioner**: Healthcare providers
+- **Organization**: Healthcare facilities
+- **Encounter**: Medical visits and interactions
 - **Condition**: Medical conditions and diagnoses
 - **Observation**: Clinical observations and measurements
+- **MedicationRequest**: Prescribed medications
+- **Procedure**: Medical procedures performed
 
-### Relationships
+**Relationships:**
+- `Patient -[HASENCOUNTER]-> Encounter`
+- `Patient -[HASCONDITION]-> Condition`
+- `Patient -[HASMEDICATION]-> MedicationRequest`
+- `Patient -[HASPROCEDURE]-> Procedure`
+- `Encounter -[HASOBSERVATION]-> Observation`
+- `Encounter -[HASCONDITION]-> Condition`
+- `MedicationRequest -[TREATMENTFOR]-> Condition`
+
+**Temporal Relationships:**
+- `Patient -[FIRSTCONDITION]-> Condition` (first diagnosed condition)
+- `Patient -[LATESTCONDITION]-> Condition` (most recent condition)
+- `Condition -[NEXTCONDITION]-> Condition` (temporal sequence)
+
+### V1 Implementation (Original)
+
+**Node Types:** Patient, Encounter, Condition, Observation
+
+**Relationships:**
 - `Patient -[HAS_ENCOUNTER]-> Encounter`
 - `Patient -[HAS_CONDITION]-> Condition`
 - `Patient -[HAS_OBSERVATION]-> Observation`
