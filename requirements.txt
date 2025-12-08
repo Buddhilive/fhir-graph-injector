@@ -1,0 +1,13 @@
+# FHIR Graph Injector Dependencies
+
+# Core dependencies
+neo4j>=5.14.0
+
+# FastAPI and server
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.4.0
+
+# Optional: for development
+# pytest>=7.4.0
+# httpx>=0.25.0
